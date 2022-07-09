@@ -1,0 +1,102 @@
+site_name: OpenAIAS
+
+theme:
+  name: material
+  language: zh-TW
+
+  features:
+    - navigation.instant  # faster loading
+    # - navigation.sections  # group sections without collapsible buttons
+    - navigation.top  # back to top button
+    - navigation.indexes  # section names can link to index.md pages
+    # - navigation.expand  # expand all collapsible subsections by default
+  
+  palette:
+    # auto mode
+    - media: "(prefers-color-scheme)"
+      primary: light blue
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    # light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default 
+      primary: light blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: light blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+markdown_extensions:
+  # Formatting
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  
+  # Data tables
+  - tables
+  
+  # Code blocks
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  
+  # Admonition
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+  # Images
+  - attr_list
+  - md_in_html
+
+  # MathJax
+  - pymdownx.arithmatex:
+      generic: true
+  
+  # Mermaid
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - introduction.md
+  - Lab 0 - Environment Setup:
+    - lab00/index.md
+  - Lab 1 - C Programming Review:
+    - lab01/index.md
+  - Lab 2 - C Memory Management Review & AI Model Tutorial:
+    - lab02/index.md
+  - Lab 3 - RISC-V Assembly:
+    - lab03/index.md
+  - Lab 4 - RISC-V Emulator:
+    - lab04/index.md
+  - Lab 5 - Chisel Tutorial & Datapath Design:
+    - lab05/index.md
+  - Lab 6 - FSM Design:
+    - lab06/index.md
+  - Lab 7 - RISC-V Implementation:
+    - lab07/index.md
+  - Lab 8 - RISC-V Standard Extension & SIMD Instructions:
+    - lab08/index.md
+  - Lab 9 - Memory-Mapped I/O & Conv2D Acceleration:
+    - lab09/index.md
+  - glossary.md
