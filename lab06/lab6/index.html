@@ -1,0 +1,2446 @@
+
+<!doctype html>
+<html lang="zh-Hant" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.3.9">
+    
+    
+      
+        <title>Lab6 FSM Design - OpenAIAS</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.1d29e8d0.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="light-blue" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab6-fsm-design" class="md-skip">
+          跳轉到
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="OpenAIAS" class="md-header__button md-logo" aria-label="OpenAIAS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OpenAIAS
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab6 FSM Design
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="" data-md-color-primary="light-blue" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_3" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_3">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜尋" placeholder="搜尋" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜尋引擎
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="OpenAIAS" class="md-nav__button md-logo" aria-label="OpenAIAS" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    OpenAIAS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab00/">Lab 0 - Environment Setup</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 0 - Environment Setup" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 0 - Environment Setup
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab01/">Lab 1 - C Programming Review</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 1 - C Programming Review" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 1 - C Programming Review
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab02/">Lab 2 - C Memory Management Review & AI Model Tutorial</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 2 - C Memory Management Review & AI Model Tutorial" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 2 - C Memory Management Review & AI Model Tutorial
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab03/">Lab 3 - RISC-V Assembly</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 3 - RISC-V Assembly" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 3 - RISC-V Assembly
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab04/">Lab 4 - RISC-V Emulator</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 4 - RISC-V Emulator" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 4 - RISC-V Emulator
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab05/">Lab 5 - Chisel Tutorial & Datapath Design</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 5 - Chisel Tutorial & Datapath Design" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 5 - Chisel Tutorial & Datapath Design
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_9" type="checkbox" id="__nav_9" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../">Lab 6 - FSM Design</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 6 - FSM Design" data-md-level="1">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 6 - FSM Design
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_10" type="checkbox" id="__nav_10" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab07/">Lab 7 - RISC-V Implementation</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 7 - RISC-V Implementation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_10">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 7 - RISC-V Implementation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_11" type="checkbox" id="__nav_11" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab08/">Lab 8 - RISC-V Standard Extension & SIMD Instructions</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 8 - RISC-V Standard Extension & SIMD Instructions" data-md-level="1">
+        <label class="md-nav__title" for="__nav_11">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 8 - RISC-V Standard Extension & SIMD Instructions
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_12" type="checkbox" id="__nav_12" >
+      
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="../../lab09/">Lab 9 - Memory-Mapped I/O & Conv2D Acceleration</a>
+          
+        </div>
+      
+      <nav class="md-nav" aria-label="Lab 9 - Memory-Mapped I/O & Conv2D Acceleration" data-md-level="1">
+        <label class="md-nav__title" for="__nav_12">
+          <span class="md-nav__icon md-icon"></span>
+          Lab 9 - Memory-Mapped I/O & Conv2D Acceleration
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        Glossary
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目錄">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目錄
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#working-environment-setup" class="md-nav__link">
+    Working Environment Setup
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chisel-related-coding-skill" class="md-nav__link">
+    Chisel-Related coding skill
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab-61-traffic-light-and-7-segment-display-controller" class="md-nav__link">
+    Lab-6.1 Traffic Light and 7-segment display controller
+  </a>
+  
+    <nav class="md-nav" aria-label="Lab-6.1 Traffic Light and 7-segment display controller">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_1" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#counter" class="md-nav__link">
+    Counter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-segment-display" class="md-nav__link">
+    7-segment display
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implement" class="md-nav__link">
+    Implement
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab6-2-arithmetic-calculator" class="md-nav__link">
+    Lab6-2 Arithmetic Calculator
+  </a>
+  
+    <nav class="md-nav" aria-label="Lab6-2 Arithmetic Calculator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_2" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab6-2-1-integer-generator" class="md-nav__link">
+    Lab6-2-1 Integer Generator
+  </a>
+  
+    <nav class="md-nav" aria-label="Lab6-2-1 Integer Generator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_3" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab6-2-2-2-operands-1-operator" class="md-nav__link">
+    Lab6-2-2 2 operands 1 operator
+  </a>
+  
+    <nav class="md-nav" aria-label="Lab6-2-2 2 operands 1 operator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_4" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lab6-3-lfsr-linear-feedback-shift-register" class="md-nav__link">
+    Lab6-3 LFSR (Linear Feedback Shift Register)
+  </a>
+  
+    <nav class="md-nav" aria-label="Lab6-3 LFSR (Linear Feedback Shift Register)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_5" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lab6-3-1-fionacci-version" class="md-nav__link">
+    Lab6-3-1 Fionacci version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lab6-3-2-galois-version" class="md-nav__link">
+    Lab6-3-2 Galois version
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hw6-1-trafficlight-with-pedestrian-button" class="md-nav__link">
+    Hw6-1 TrafficLight with Pedestrian button
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-1 TrafficLight with Pedestrian button">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_6" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hw6-2-calculator" class="md-nav__link">
+    Hw6-2 Calculator
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-2 Calculator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preface" class="md-nav__link">
+    preface
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hw6-2-1-negative-integer-generator" class="md-nav__link">
+    Hw6-2-1 Negative Integer Generator
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-2-1 Negative Integer Generator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_7" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hw6-2-2-n-operands-n-1-operators-" class="md-nav__link">
+    Hw6-2-2 N operands N-1 operators(+、-)
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-2-2 N operands N-1 operators(+、-)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_8" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hw6-2-3-order-of-operation-" class="md-nav__link">
+    Hw6-2-3 Order of Operation (+、-、*、(、))
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-2-3 Order of Operation (+、-、*、(、))">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_9" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bonus" class="md-nav__link">
+    Bonus
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hw6-3-lfsr-base-1a2b-number-guess-game" class="md-nav__link">
+    Hw6-3 LFSR-base 1A2B Number Guess Game
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-3 LFSR-base 1A2B Number Guess Game">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preface_1" class="md-nav__link">
+    preface
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hw6-3-1-pseudo-random-number-generator" class="md-nav__link">
+    Hw6-3-1 Pseudo Random Number Generator
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-3-1 Pseudo Random Number Generator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_10" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hw6-3-2-1a2b-game-quiz" class="md-nav__link">
+    Hw6-3-2 1A2B game quiz
+  </a>
+  
+    <nav class="md-nav" aria-label="Hw6-3-2 1A2B game quiz">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_11" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bonus-1a2b-hardware-solver" class="md-nav__link">
+    Bonus : 1A2B hardware solver
+  </a>
+  
+    <nav class="md-nav" aria-label="Bonus : 1A2B hardware solver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#introduction_12" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+
+
+<h1 id="lab6-fsm-design">Lab6 FSM Design</h1>
+<h2 id="working-environment-setup">Working Environment Setup</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">## bring up the AIAS course docker container</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">## clone the lab6 files</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>$  <span class="nb">cd</span> /workspace/projects
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>$  git clone https://playlab.computing.ncku.edu.tw:4001/aias_spring_2022/Lab06.git Lab06
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>$  <span class="nb">cd</span> Lab06
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1">## add your private upstream repositories</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1">## make sure you have create project repo under your gitlab account</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>$  git remote add gitlab https://playlab.computing.ncku.edu.tw:4001/&lt;your ldap name&gt;/Lab06.git
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>$  git remote -v
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>gitlab  https://playlab.computing.ncku.edu.tw:4001/&lt;your ldap name&gt;/Lab06.git <span class="o">(</span>fetch<span class="o">)</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>gitlab  https://playlab.computing.ncku.edu.tw:4001/&lt;your ldap name&gt;/Lab06.git <span class="o">(</span>push<span class="o">)</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>origin  https://playlab.computing.ncku.edu.tw:4001/aias_spring_2022/Lab06.git <span class="o">(</span>fetch<span class="o">)</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>origin  https://playlab.computing.ncku.edu.tw:4001/aias_spring_2022/Lab06.git <span class="o">(</span>push<span class="o">)</span>
+</code></pre></div>
+<ul>
+<li>
+<p>Follow <a href="https://playlab.computing.ncku.edu.tw:3001/noqmh6rZTriCAo8Z2ugpBw?both#Create-Project">Create project</a> and <a href="https://playlab.computing.ncku.edu.tw:3001/noqmh6rZTriCAo8Z2ugpBw?both#Manage-Permission">Manage Permission</a> to create your own project repo. You can find both section in <a href="https://playlab.computing.ncku.edu.tw:3001/noqmh6rZTriCAo8Z2ugpBw?both">AIAS 2022 Git command reference </a></p>
+</li>
+<li>
+<p>When you are done with your code, you have to push your code back to your own gitlab account with the following command...</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">## the first time</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>$  git push --set-upstream https://playlab.computing.ncku.edu.tw:4001/&lt;your ldap name&gt;/Lab06.git master
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">## after the first time</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>$  git fetch origin master
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>$  git push gitlab master
+</code></pre></div>
+<ul>
+<li>File in Lab06</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>─Lab06/
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    ├─ .git and .gitignore
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    ├─ build.sh
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    ├─ build.sbt
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    ├─ build.sc
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    └─ src/
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>        ├─main/
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>        |  └─scala/
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>        |     └─aias_lab6/
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>        |        ├─Hw1/TrafficLight_p.scala
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>        |        ├─Hw2/
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>        |        |  ├─CpxCal.scala
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        |        |  ├─LongCal.scala
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>        |        |  └─NegIntGen.scala
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>        |        ├─Hw3/
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        |        |  ├─PRNG.scala
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>        |        |  └─NumGuess.scala
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>        |        ├─Bonus/
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        |        |  ├─Solver.scala
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        |        |  └─top.scala
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>        |        ├─Lab1/
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>        |        |  ├─Counter.scala
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>        |        |  ├─SevenSeg.scala
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>        |        |  └─TrafficLight.scala
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>        |        ├─Lab2/
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>        |        |  ├─EasyCal.scala
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>        |        |  └─IntGen.scala
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        |        └─Lab3/
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>        |           ├─LFSR_Fibonacci.scala
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>        |           └─LFSR_Galois.scala
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>        └─test/
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>            └─scala/
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>            └─aias_lab6/
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>                ├─Hw1/TrafficLight_pTest.scala
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>                ├─Hw2/
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>                |  ├─CpxCalTest.scala
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>                |  ├─LongCalTest.scala
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>                |  └─NegIntGenTest.scala
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>                ├─Hw3/
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>                |  ├─PRNGTest.scala
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>                |  └─NumGuessTest.scala
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>                ├─Bonus/
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>                |  ├─SolverTest.scala
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>                |  └─topTest.scala
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>                ├─Lab1/
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>                |  ├─CounterTest.scala
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>                |  └─TrafficLightTest.scala
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>                ├─Lab2/
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>                |  ├─EasyCalTest.scala
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>                |  └─IntGenTest.scala
+<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>                └─Lab3/
+<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>                    ├─LFSR_FibonacciTest.scala
+<a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>                    └─LFSR_GaloisTest.scala
+</code></pre></div>
+<h2 id="introduction">Introduction</h2>
+<ul>
+<li>在課堂上，介紹了...<ul>
+<li>電路行為的狀態圖(State Transition Diagram)繪製並以FSM的方式實現</li>
+<li>FSM的基本組成<ul>
+<li>next state decoder (comb.)</li>
+<li>output decoder (comb.)</li>
+<li>state register (seq.)</li>
+</ul>
+</li>
+<li>FSM的兩大派別<ul>
+<li>Mealey：output只和當前state相關。</li>
+<li>Moore：output和當前state以及input相關。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>那在這次Lab中你會學習到：<ul>
+<li>基本FSM的寫法，並以之實現複雜電路功能。</li>
+</ul>
+</li>
+</ul>
+<h2 id="chisel-related-coding-skill">Chisel-Related coding skill</h2>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>建議同學可以先看chisel book的FSM部分。</p>
+</div>
+<ul>
+<li>以下列舉了一些在實作FSM時常用到的語法</li>
+<li><strong>Enumeration</strong><ul>
+<li>from <a href="https://www.chisel-lang.org/api/latest/chisel3/util/Enum.html">chisel3.util.Enum</a></li>
+<li>
+<p>code
+    ```scala=
+    //記得要import這個library
+    import chisel3.util._</p>
+<p>val sIdle :: sMonday :: sTuesday :: sWendsday :: Nil = Enum(4)</p>
+<p>//你也可以用逐一宣告的方式...
+val sIdle = 0.U
+val sMonday = 1.U
+...
+<code>- 還記得preview，有放上兩篇介紹scala中有關各式**集合**的文章嗎？[1](https://blog.csdn.net/qq_34291505/article/details/86832500)和[2](https://vvviy.github.io/2018/12/12/Learning-Chisel-and-Scala-Part-II/)
+    - Enum(4)會編號左邊list中每個元素，Dtype為UInt，從0.U開始。
+    - Nil為list的結尾，不包含在list的“長度”中。
+    - 所以在你使用條件判斷時，下面這兩行是等價的，但上面的判讀性就相對較好些。</code>chisel=
+when (state === sIdle){...}
+when (state === 0.U){...}
+<code>3. **Conditional block**
+    1. when-elsewhen-otherwise
+- format</code>chisel=
+    when(condition){
+      //behavior
+    }.elsewhen(condition){
+      //behavior
+    }.otherwise{
+      //default behavior
+    }
+    <code>:::info
+- reminder
+    - chisel中：**等於**(**===**)和**不等於**(**=/=**)
+    - elsewhen和otherwise前面要記得加上點(.)
+:::
+    3. switch-is
+- format</code>chisel=
+    // default behavior</p>
+<div class="highlight"><pre><span></span><code>switch(判斷對象){
+  is(condition){
+    //behavior
+  }
+  is(condition){
+    //behavior
+  }
+  ...
+}
+
+```
+</code></pre></div>
+<p>:::info
+- reminder
+    - switch-is本身沒有可以決定電路default行為的寫法，會建議大家在<strong>前面</strong>補上default behavior。
+        - 補齊訊號隨條件改變的完整性，硬體合成時可以減少latch的出現。
+        - default宣告在前面是因為chisel是越<strong>後面</strong>的宣告priority越大。
+:::</p>
+</li>
+</ul>
+</li>
+</ul>
+<!-- ## Lab-6.1 Vending Machine
+-<center>![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_253ae7548a394745090d651695019941.png =25%x)</center>
+### Introduction
+- 假設有台販賣機只賣一種飲料，定價為25元，而接受的硬幣只有5元和10元兩種，不找零，且金額一旦足夠就直接給你飲料，回到初始狀態，等待下個心胸寬廣的客人上門購買飲料。
+>[name=助教]FSM只是實現sequential電路的其中一種技巧，並不一定適合所有的電路，有時限制很多寫起來反而會顯得麻煩和不切實際。但這個例子是先讓同學們上手FSM的撰寫方式。
+### Implement
+- port declaration
+    - Input 
+        - 投幣訊號：five、ten
+    - Output
+        - 表示投入金額足夠：valid
+- state transition diagram
+    ![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_4dbbc31b252b2414ceaa9b4cc49ab596.png =70%x)
+    - code
+        ```scala=
+        package aias_lab6
+        import chisel3._
+        import chisel3.util._
+
+        class VendingMachine extends Module {
+          val io = IO(new Bundle {
+            val five = Input(Bool())
+            val ten   = Input(Bool())
+            val valid  = Output(Bool())
+          })
+          val sIdle :: s5 :: s10 :: s15 :: sOk :: Nil = Enum(5)
+
+          //State Register
+          //RegInit：決定好暫存器要reset成什麼值。
+          val state = RegInit(sIdle)
+
+          //Next State Decoder
+          state := state //default
+          switch (state) {
+            is (sIdle) {
+              when (io.five) { state := s5 }
+              when (io.ten) { state := s10 }
+            }
+            is (s5) {
+              when (io.five) { state := s10 }
+              when (io.ten) { state := s15 }
+            }
+            is (s10) {
+              when (io.five) { state := s15 }
+              when (io.ten) { state := sOk }
+            }
+            is (s15) {
+              when (io.five) { state := sOk }
+              when (io.ten) { state := sOk }
+            }
+            is (sOk) {
+              state := sIdle
+            }
+          }
+
+          //Output Decoder
+          io.valid := (state === sOk)
+        }
+        ```
+    - tester
+        ```scala=
+        package aias_lab6
+        import chisel3.iotesters.PeekPokeTester
+
+        class VendingMachineTests(c: VendingMachine) extends PeekPokeTester(c) {
+          var money = 0
+          var isValid = false
+          for (t <- 0 until 20) {
+            val coin     = rnd.nextInt(3)*5
+            val isNickel = coin == 5
+            val isDime   = coin == 10
+
+            // Advance circuit
+            poke(c.io.nickel, if (isNickel) 1 else 0)
+            poke(c.io.dime,   if (isDime) 1 else 0)
+            step(1)
+
+            // Advance model
+            money = if (isValid) 0 else money + coin
+            isValid = money >= 20
+
+            // Compare
+            expect(c.io.valid, if (isValid) 1 else 0)
+          }
+        }
+        ```
+ -->
+
+<h2 id="lab-61-traffic-light-and-7-segment-display-controller">Lab-6.1 Traffic Light and 7-segment display controller</h2>
+<p>-<center><img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_efa16fa861f1f1037e5c9ea8ba5f0bd9.png =28%x" /><img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_9cffe43b6095c04452d2885e10b5b659.png =50%x" />
+</center></p>
+<h3 id="introduction_1">Introduction</h3>
+<ul>
+<li>Lab6-1為實作FSM經典命題：紅綠燈，利用上禮拜教的Hardware Generator，決定綠燈以及黃燈的時長(兩者加起來時長為紅燈)，並將倒數時間以七段顯示器的方式呈現。</li>
+</ul>
+<!-- -<center>![](https://playlab.computing.ncku.edu.tw:3001/uploads/upload_acefc486f0a037028a4e9ca720318289.png)</center> -->
+
+<h3 id="counter">Counter</h3>
+<ul>
+<li>counter也是個小型的FSM，存值一直加一，直到數到最大限制時歸零。</li>
+<li>你當然可以使用FSM來描述counter，但假設設計為0~7，那就會有8個狀態需要描述，但這8個狀態又有7個行為模式皆相同，倒不如直接描述暫存器的行為就好。</li>
+<li>
+<p>Counter example code
+    ```scala=
+    counter = RegInit(0.U(3.W))
+    counter := Mux(counter===7.U,0.U,counter+1.U)</p>
+<p>//or
+when(counter===7.U){counter:=0.U}
+.otherwise{counter:=counter+1.U}
+```</p>
+</li>
+</ul>
+<h3 id="7-segment-display">7-segment display</h3>
+<ul>
+<li>將倒數時間具現化的工具</li>
+<li>僅由Comb. circuit組成，若將Counter視為FSM，那麼此部分即為Output Decoder</li>
+<li>a~g為每一段的編號，而後面接的數字則表示在顯示哪數字時該段需變亮。<ul>
+<li>a：0、2、3、5、6、7、8、9</li>
+<li>b：0、1、2、3、4、7、8、9</li>
+<li>c：0、1、3、4、5、6、7、8、9</li>
+<li>d：0、2、3、5、6、8、9</li>
+<li>e：0、2、6、8</li>
+<li>f：0、4、5、6、8、9</li>
+<li>g：2、3、4、5、6、8、9</li>
+</ul>
+</li>
+</ul>
+<h3 id="implement">Implement</h3>
+<ul>
+<li>port declaration<ul>
+<li>Input<ul>
+<li>None<ul>
+<li>電路reset後就不斷開始數，無外界因素影響FSM運作。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Output<ul>
+<li>H_traffic：水平路段的燈號呈現(Off：0 Red：1 Yellow：2 Green：3)</li>
+<li>V_traffic：垂直路段的燈號呈現(Off：0 Red：1 Yellow：2 Green：3)</li>
+<li>timer：倒數計時器</li>
+<li>display：七段顯示器的7段訊號。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>state transition diagram
+    <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_7db6e08f194e647763f3cedf28174783.png =35%x" /></p>
+</li>
+<li>
+<p>Lab6-1 TrafficLight Code
+    ```scala=
+    class TrafficLight(Ytime:Int, Gtime:Int) extends Module{
+      val io = IO(new Bundle{
+        val H_traffic = Output(UInt(2.W))
+        val V_traffic = Output(UInt(2.W))
+        val timer     = Output(UInt(5.W)) 
+        val display   = Output(UInt(7.W)) 
+      })</p>
+<p>//parameter declaration
+  val Off = 0.U
+  val Red = 1.U
+  val Yellow = 2.U
+  val Green = 3.U</p>
+<p>val sIdle :: sHGVR :: sHYVR :: sHRVG :: sHRVY :: Nil = Enum(5)</p>
+<p>//State register
+  val state = RegInit(sIdle)</p>
+<p>//Counter============================
+  val cntMode = WireDefault(0.U(1.W))
+  val cntReg = RegInit(0.U(4.W))
+  val cntDone = Wire(Bool())
+  cntDone := cntReg === 0.U</p>
+<p>when(cntDone){
+    when(cntMode === 0.U){
+      cntReg := (Gtime-1).U
+    }.elsewhen(cntMode === 1.U){
+      cntReg := (Ytime-1).U
+    }
+  }.otherwise{
+    cntReg := cntReg - 1.U
+  }
+  //Counter end========================</p>
+<p>//Next State Decoder
+  switch(state){
+    is(sIdle){
+      state := sHGVR
+    }
+    is(sHGVR){
+      when(cntDone) {state := sHYVR}
+    }
+    is(sHYVR){
+      when(cntDone) {state := sHRVG}
+    }
+    is(sHRVG){
+      when(cntDone) {state := sHRVY}
+    }
+    is(sHRVY){
+      when(cntDone) {state := sHGVR}
+    }
+  }</p>
+<p>//Output Decoder
+  //Default statement
+  cntMode := 0.U
+  io.H_traffic := Off
+  io.V_traffic := Off</p>
+<p>switch(state){
+    is(sHGVR){
+      cntMode := 1.U
+      io.H_traffic := Green
+      io.V_traffic := Red
+    }
+    is(sHYVR){
+      cntMode := 0.U
+      io.H_traffic := Yellow
+      io.V_traffic := Red
+    }
+    is(sHRVG){
+      cntMode := 1.U
+      io.H_traffic := Red
+      io.V_traffic := Green
+    }
+    is(sHRVY){
+      cntMode := 0.U
+      io.H_traffic := Red
+      io.V_traffic := Yellow
+    }
+  }</p>
+<p>io.timer := cntReg</p>
+<p>val ss = Module(new SevenSeg())
+  ss.io.num := cntReg
+  io.display := ss.io.display
+}
+<code>- 接著執行這條指令...</code>shell=
+$ mill chiselModule.test.runMain aias_lab6.Lab1.TrafficLightTest
+```
+- 結果...
+  <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_ce58e4b33ad8054d1074c11fb0d65cce.png" />
+- 綠燈時長在tester裡設為7，為6~0
+- 黃燈時長在tester裡設為3，為2~0
+:::warning
+- TrafficLight.scala行為描述
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_ec75fc6469f36689a302daa95e20e573.png" /></p>
+</li>
+<li>
+<p>TrafficLight.scala內部的互動
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_f1a6b4c12de111d20fecd83ab7cf98e9.png" /></p>
+</li>
+<li>
+<p>[name=王凱弘]
+:::</p>
+</li>
+</ul>
+<h2 id="lab6-2-arithmetic-calculator">Lab6-2 Arithmetic Calculator</h2>
+<h3 id="introduction_2">Introduction</h3>
+<ul>
+<li>此次<strong>作業</strong>希望同學可以實現擁有加減乘功能的且遵守四則運算規則的計算機，輸入算式的方式會以series輸入，同學需根據不同的電路”狀態“來因應當前輸入信號的處理。</li>
+<li>由Lab6-2開始入門，作業再進行後續延伸。<ul>
+<li>Level_1 Integer Generator</li>
+<li>Level_2 2 operands 1 operator(+、-、*)</li>
+</ul>
+</li>
+<li>HomeWork<ul>
+<li>Level_3 negative Integer Generator</li>
+<li>Level_4 N operands N-1 operators(+、-)</li>
+<li>Level_5 Order of Operation (+、-、*、(、))</li>
+</ul>
+</li>
+<li>數字鍵符號鍵和硬體輸入訊號的mapping，剛好4bits就能完整表示我們需要的input：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>HardWare</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0x0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0x1</td>
+</tr>
+<tr>
+<td>2      -</td>
+<td>0x2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0x3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0x4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0x5</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0x6</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0x7</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0x8</td>
+</tr>
+<tr>
+<td>9</td>
+<td>0x9</td>
+</tr>
+<tr>
+<td>+</td>
+<td>0xA</td>
+</tr>
+<tr>
+<td>-</td>
+<td>0xB</td>
+</tr>
+<tr>
+<td>*</td>
+<td>0xC</td>
+</tr>
+<tr>
+<td>(</td>
+<td>0xD</td>
+</tr>
+<tr>
+<td>)</td>
+<td>0xE</td>
+</tr>
+<tr>
+<td>=</td>
+<td>0xF</td>
+</tr>
+</tbody>
+</table>
+<h2 id="lab6-2-1-integer-generator">Lab6-2-1 Integer Generator</h2>
+<h3 id="introduction_3">Introduction</h3>
+<ul>
+<li>一台功能正常的計算機，當你輸入常數按下等號後，必會顯示出剛剛輸入的數字。
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Input: 1 2 3 4 =
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>Output: 1234
+</code></pre></div></li>
+<li>此次lab希望同學能夠依照輸入順序的權重將輸入組合成期望的數字。</li>
+<li>
+<p>State declaration</p>
+<ul>
+<li><strong>sIdle</strong>：reset中。<ul>
+<li><font color=#888>切換至sAccept：reset訊號結束的下一刻電路開始運作。</font></li>
+</ul>
+</li>
+<li><strong>sAccept</strong>：接收輸入並組合數字。<ul>
+<li><font color=#888>切換至sEqual：接收到"=(15)"時</font></li>
+</ul>
+</li>
+<li><strong>sEqual</strong>：<ol>
+<li>清空number暫存器，以準備下一次的輸入。</li>
+<li>顯示組合出的數字，並將Valid訊號設為true。</li>
+<li><font color=#888>再次切換至sAccept，準備開始接受下一筆測值。</font>
+:::info</li>
+</ol>
+</li>
+<li>電路設計中，難以避免的是I/O port上隨時都有值，只能依靠<strong>ready-valid協議</strong>來讓彼此相連的兩個blocks知道目前在port上的資料是否可以取用。<ul>
+<li>再更複雜的chisel設計中，常會見得在I/O port與Data type的宣告間，多包了一層<strong>Valid</strong>(沒有ready)、或者是<strong>DecoupledIO</strong>(如下面程式碼的第4行)，一旦包上，在取值上會與原本的語法有些不同，必須得多加上以下三項，才能取到或賦值給你想要的wire(下面程式碼Line36、37)。<ul>
+<li>ready(input)：接受來自下一級的ready訊號，(下一級電路)向上一級準備好接受下一筆資料了。</li>
+<li>valid(output)：傳遞給下一級表示目前port上這筆資料為可以取用。</li>
+<li>bits：data</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>乘以10的實現方式(line 29)<ul>
+<li>電路設計中，若寫 *10，代價會是合成出一<strong>乘法器</strong>，嚴重影響硬體面積的罪魁禍首...乘法器的出現應該只有在電路需要很general的乘法時才不得不出現(ex：快速傅立葉轉換)，若單單只需要*10，應以shift和add取而代之。
+:::</li>
+</ul>
+</li>
+</ul>
+<p>:::info</p>
+<blockquote>
+<p>[name=張峻豪]
+<strong>DecoupledIO的用法</strong></p>
+<p>Decoupled 通常用於 module 輸出端訊號的宣告
+因為如果利用 Decoupled 宣告某一個 IO Port，則 Chisel 會編譯生成以下電路</p>
+<p><img alt="" src="https://pic2.zhimg.com/v2-1cc2bb62e3fd71cd4bacc09b4a9af835_r.jpg" /></p>
+<p>其中原本的輸出訊號會包含以下三個部分</p>
+<ul>
+<li><code>io.outSignal.bits</code></li>
+<li><code>io.outSignal.valid</code></li>
+<li><code>io.outSignal.ready</code></li>
+</ul>
+<p>而 <code>bits</code> 和 <code>valid</code> 的屬性都是 <code>Output</code>，但要注意 <code>ready</code> 的屬性為 <code>Intput</code>。通常 <code>ready</code> 訊號會接收下一級（next stage）電路傳來的 ready 訊號，只有當下一級電路的 ready 訊號和目前模組的 valid 訊號同為 High 時，該模組的輸出信號才會被下一級電路採用
+（所以才會被稱為握手協議，因為只有當我的 valid 和他的 ready 都為 High 時，我的輸出才會被他所採用，就像是我們兩個都各自想和對方握手，我們才能握手一樣。）</p>
+<p>宣告 IO Port 的時候，利用以下方式宣告</p>
+<p><code>scala=
+val io = IO(new Bundle{
+   outSignal = Decoupled(Output(Dtype(width.W)))
+   // ...
+})</code></p>
+<p>其中 <code>Dtype</code> 是訊號類型，例如 <code>UInt</code>、<code>Bool</code> 等等...</p>
+<p>更多用法舉例可以參考：<a href="https://blog.csdn.net/PP_forever/article/details/95977959">Decoupled用法</a>
+:::</p>
+</blockquote>
+<p>:::info</p>
+<blockquote>
+<p>[name=張峻豪]
+<strong>乘以 10 方法的解釋</strong></p>
+<p>在下面助教的範例程式裡面寫到</p>
+<p><code>scala=
+number := (number&lt;&lt;3.U) + (number&lt;&lt;1.U) + in_buffer</code></p>
+<p>他的含義其實就是，往左 shift 3-bits 等同於乘以8，而往左 shift 1-bits 等同於乘以2，所以兩者相加就等價於乘以10。
+:::</p>
+</blockquote>
+</li>
+<li>
+<p>Hardware Circuit Overview
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_9769558c8f15f944472e621dba420b5e.png =80%x" /></p>
+</li>
+<li>
+<p>Lab6-2-1 IntGen.scala code
+    ```scala=
+    class IntGen extends Module{
+        val io = IO(new Bundle{
+            val key_in = Input(UInt(4.W))
+            val value = Output(Valid(UInt(32.W)))
+        })</p>
+<div class="highlight"><pre><span></span><code>val equal = WireDefault(false.B)
+equal := io.key_in === 15.U
+
+val sIdle :: sAccept :: sEqual :: Nil = Enum(3)
+val state = RegInit(sIdle)
+//Next State Decoder
+switch(state){
+    is(sIdle){
+    state := sAccept
+    }
+    is(sAccept){
+    when(equal) {state := sEqual}
+    }
+    is(sEqual){
+        state := sAccept
+    }
+}
+
+val in_buffer = RegNext(io.key_in)
+
+val number = RegInit(0.U(32.W))
+when(state === sAccept){
+    number := (number&lt;&lt;3.U) + (number&lt;&lt;1.U) + in_buffer
+}.elsewhen(state === sEqual){
+    number := 0.U
+}.otherwise{
+    number := number
+}
+
+io.value.valid := Mux(state === sEqual,true.B,false.B)
+io.value.bits := number
+</code></pre></div>
+<p>}
+```</p>
+</li>
+<li>
+<p>接著執行這條指令...
+    <code>shell=
+    $ mill chiselModule.test.runMain aias_lab6.Lab2.IntGenTest</code></p>
+</li>
+<li>結果...
+  <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_62345b971a8642d1dc44e35f48f1fe61.png" /></li>
+</ul>
+<h2 id="lab6-2-2-2-operands-1-operator">Lab6-2-2 2 operands 1 operator</h2>
+<h3 id="introduction_4">Introduction</h3>
+<ul>
+<li>接續6-2-1，能夠組合出數字後，接著根據輸入的運算子，使兩個不同的運算元去做想要的運算。
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Input：1 2 3 4 - 2 3 4 =
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Output：1000
+</code></pre></div></li>
+<li>State declaration<ul>
+<li><strong>sIdle</strong>：reset中。<ul>
+<li><font color=#888>切換至sAccept：reset訊號結束的下一刻電路開始運作。</font></li>
+</ul>
+</li>
+<li><strong>sSrc1</strong>：接收輸入並組合Src1。<ul>
+<li><font color=#888>切換至sOp：接收到"+(10)、-(11)、*(12)"時</font></li>
+</ul>
+</li>
+<li><strong>sOp</strong>：接收輸入設定運算方式。<ul>
+<li><font color=#888>切換至sSrc2：接收到"0~9"時</font></li>
+</ul>
+</li>
+<li><strong>sSrc2</strong>：接收輸入並組合Src2。<ul>
+<li><font color=#888>切換至sEqual：接收到"=(15)"時</font></li>
+</ul>
+</li>
+<li><strong>sEqual</strong>：<ol>
+<li>清空number暫存器，以準備下一次的輸入。</li>
+<li>顯示組合出的數字，並將Valid訊號設為true。</li>
+<li><font color=#888>切換至sSrc1</font></li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>Hardware Circuit Overview
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_47b1fdb0fc3e709b207a7dde1720ace8.png" /></p>
+</li>
+<li>
+<p>Lab6-2-2 EasyCal.scala code
+    ```scala=
+    class EasyCal extends Module{
+        val io = IO(new Bundle{
+            val key_in = Input(UInt(4.W))
+            val value = Output(Valid(UInt(32.W)))
+        })</p>
+<div class="highlight"><pre><span></span><code>//Wire Declaration===================================
+val operator = WireDefault(false.B)
+operator := io.key_in &gt;= 10.U &amp;&amp; io.key_in &lt;= 12.U
+
+val num = WireDefault(false.B)
+num := io.key_in &lt; 10.U
+
+val equal = WireDefault(false.B)
+equal := io.key_in === 15.U
+
+//Reg Declaration====================================
+val in_buffer = RegNext(io.key_in)
+val src1 = RegInit(0.U(32.W))
+val op = RegInit(0.U(2.W))
+val src2 = RegInit(0.U(32.W))
+
+//State and Constant Declaration=====================
+val sIdle :: sSrc1 :: sOp :: sSrc2 :: sEqual :: Nil = Enum(5)
+val add = 0.U
+val sub = 1.U
+val mul = 2.U
+
+val state = RegInit(sIdle)
+
+//Next State Decoder
+switch(state){
+    is(sIdle){
+        state := sSrc1
+    }
+    is(sSrc1){
+        when(operator) {state := sOp}
+    }
+    is(sOp){
+        when(num) {state := sSrc2}
+    }
+    is(sSrc2){
+        when(equal) {state := sEqual}
+    }
+    is(sEqual){
+        state := sSrc1
+    }
+}
+//==================================================
+
+when(state === sSrc1){src1 := (src1&lt;&lt;3.U) + (src1&lt;&lt;1.U) + in_buffer}
+when(state === sSrc2){src2 := (src2&lt;&lt;3.U) + (src2&lt;&lt;1.U) + in_buffer}
+when(state === sOp){op := in_buffer - 10.U}
+
+when(state === sEqual){
+    src1 := 0.U
+    src2 := 0.U
+    op := 0.U
+}
+
+io.value.valid := Mux(state === sEqual,true.B,false.B)
+io.value.bits := MuxLookup(op,0.U,Seq(
+    add -&gt; (src1 + src2),
+    sub -&gt; (src1 - src2),
+    mul -&gt; (src1 * src2)
+))
+</code></pre></div>
+<p>}
+```
+:::success
+FSM受什麼影響才改變狀態?
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_b2cbae71df5a38d3646112e5953da0d4.png" />
+- [name=王凱弘]</p>
+<p>:::
+- 接著執行這條指令...
+<code>shell=
+$ mill chiselModule.test.runMain aias_lab6.Lab2.EasyCalTest</code>
+- 結果...
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_56e712fd8bcded549d5b3483850b74d0.png" /></p>
+</li>
+</ul>
+<h2 id="lab6-3-lfsr-linear-feedback-shift-register">Lab6-3 LFSR (Linear Feedback Shift Register)</h2>
+<h3 id="introduction_5">Introduction</h3>
+<ul>
+<li>沿用了Lab2的命題，這裡就不再多做贅述，直接參考<a href="https://playlab.computing.ncku.edu.tw:3001/2OlLw_ZNT5eGcGkSFqyQtg#Lab-2-2-LFSR">Lab2</a>就好了！</li>
+<li>此硬體的功能實現較為容易，設計也較為自由<ul>
+<li>shift reg的長度(個數)</li>
+<li>tap有多少個，位置</li>
+</ul>
+</li>
+</ul>
+<h3 id="lab6-3-1-fionacci-version">Lab6-3-1 Fionacci version</h3>
+<ul>
+<li>提供的程式碼，讓使用者能夠根據傳入參數(n)的不同選擇(4、8)兩種不同size的lfsr<ul>
+<li>---&gt;Hardware Generator</li>
+</ul>
+</li>
+<li>
+<p>Lab3/LFSR_Fibonacci.scala code
+    ```scala=
+    object LfsrTaps {
+        def apply(size: Int): Seq[Int] = {
+            size match {
+                // Seqp[Int] means the taps in LFSR
+                case 4 =&gt; Seq(3)          //p(x) = x<sup>4+x</sup>3+1
+                case 8 =&gt; Seq(6,5,4)      //p(x) = x<sup>8+x</sup>6+x<sup>5+x</sup>4+1
+                case _ =&gt; throw new Exception("No LFSR taps stored for requested size")
+            }
+        }
+    }</p>
+<p>class LFSR_Fibonacci (n:Int)extends Module{
+    val io = IO(new Bundle{
+        val seed = Input(Valid(UInt(n.W)))
+        val rndNum = Output(UInt(n.W))
+    })</p>
+<div class="highlight"><pre><span></span><code>//ShiftReg的初始化
+val shiftReg = RegInit(VecInit(Seq.fill(n)(false.B)))
+
+//傳入seed，將seed值放上ShiftReg
+when(io.seed.valid){
+  shiftReg zip io.seed.bits.asBools map {case(l,r) =&gt; l := r}
+}.otherwise{
+
+  //Barrel Shift Register
+  (shiftReg.zipWithIndex).map{
+    case(sr,i) =&gt; sr := shiftReg((i+1)%n)
+  }
+
+  //Fibonacci LFSR
+  shiftReg(n-1) := (LfsrTaps(n).map(x=&gt;shiftReg(n-x)).reduce(_^_)) ^ shiftReg(0)
+}
+io.rndNum := shiftReg.asUInt
+</code></pre></div>
+<p>}
+<code>:::info
+- 解釋(Line 32)：
+    - shiftReg(n-1)的下一個值來源和其他的暫存器不同，所以覆寫掉上面barrel shifter寫的，記住：後寫的priority較大。
+    - LfsrTap(4)，會回傳一Seq，為Seq(3)
+    - **map指令**為Higher-order function，map(x=&gt;shiftReg(n-x))將Seq(3)變成了Seq(shiftReg(1))
+    - **reduce指令**也同為Higher-order function，主要工作為針對集合裡的所有元素做單一運算(比如說sum、&amp;&amp;)，在此範例中是^(XOR)，最後會匯集回傳一個值。
+:::
+- 接著執行這條指令...</code>shell=
+$ mill chiselModule.test.runMain aias_lab6.Lab3.LFSR_FibonacciTest
+```
+- 結果...
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_a135cee05170e6d22a8c08ffeeb7cac9.png" /></p>
+</li>
+</ul>
+<h3 id="lab6-3-2-galois-version">Lab6-3-2 Galois version</h3>
+<ul>
+<li>另一種產生隨機數的方式</li>
+<li>硬體實現的優點：有較短的critical path</li>
+<li>
+<p>Lab3/LFSR_Galois.scala code
+    ```scala=
+    class LFSR_Galois (n:Int)extends Module{</p>
+<div class="highlight"><pre><span></span><code>val io = IO(new Bundle{
+    val seed = Input(Valid(UInt(n.W)))
+    val rndNum = Output(UInt(n.W))
+})
+
+val shiftReg = RegInit(VecInit(Seq.fill(n)(false.B)))
+
+when(io.seed.valid){
+  shiftReg zip io.seed.bits.asBools map {case(l,r) =&gt; l := r}
+}.otherwise{
+
+  //Right Barrel Shift Register
+  (shiftReg.zipWithIndex).map{
+      case(sr,i) =&gt; sr := shiftReg((i+1)%n)
+  }
+
+  //Galois LFSR
+  LfsrTaps(n).map{x =&gt; {shiftReg(x-1) := shiftReg(x) ^ shiftReg(0)}}
+}
+
+io.rndNum := shiftReg.asUInt
+</code></pre></div>
+<p>}
+<code>:::info
+- 上面兩個lab放在同個package裡面，所以直接引用LfsrTaps(n)即可。
+:::
+- 接著執行這條指令...</code>shell=
+$ mill chiselModule.test.runMain aias_lab6.Lab3.LFSR_FibonacciTest
+```
+- 結果
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_a4dbd2813b18a9200ce9062b1fa3c683.png" /></p>
+<h2 id="hw6-1-trafficlight-with-pedestrian-button">Hw6-1 TrafficLight with Pedestrian button</h2>
+<h4 id="introduction_6">Introduction</h4>
+<ul>
+<li>
+<p>Lab6-1做出了僅考慮了十字路口中的水平以及垂直車流，而此項作業希望同學能將行人通行的狀態加入至原本的FSM中。並新增了<strong>行人通行按鈕</strong>的功能。
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_e43ef779607c1cf3e59fae800a347ac8.png =35%x" /></p>
+</li>
+<li>
+<p>行人通行狀態(<strong>sPG</strong>)，請加入至Lab6-1狀態圖中sHRVY和sHGVR之間，且時長由一新增傳入參數<code>Ptime</code>決定。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>行人通行按鈕</strong><code>P_button</code>功能描述：</p>
+<ol>
+<li>按下當下狀態非行人通行狀態(sPG)：無論在哪種狀態，下一刻立即切換至行人通行狀態，並維持<code>Ptime</code>時間。結束之後，便切回按下按鈕那一刻的狀態，重新倒數，並維持原先排程。<ul>
+<li>Ex.我在sHGVR的時候按下了p_button，則下一刻會變成行人通行狀態維持<code>Ptime</code>秒後，狀態切回sHGVR且<strong>重新倒數</strong>，準備切換至sHYVR。</li>
+</ul>
+</li>
+<li>按下當下狀態為行人通行狀態(sPG)：並無功能。</li>
+</ol>
+</li>
+<li>
+<p>測試要求：</p>
+<ol>
+<li>雖然時長由傳入參數決定，但為了驗證各位同學的電路功能，時長設定統一如下...，完整週期共會花費25秒。這部分已在tester中設定，同學不用做什麼更動。<ul>
+<li>Ytime = 3</li>
+<li>Gtime = 7</li>
+<li>Ptime = 5</li>
+</ul>
+</li>
+<li>請同學在繳交文件上附上<strong>vcd檔截圖</strong>兩段(以下說明)，圖上至少須包含以下信號...<ul>
+<li>state</li>
+<li>timer</li>
+<li>H_traffic</li>
+<li>V_traffic</li>
+<li>P_traffic</li>
+<li>p_button</li>
+</ul>
+</li>
+<li>兩段截圖：<ul>
+<li>第一段：前25個週期，為不受<code>P_button</code>干擾的燈號運行，理應飽含了紅綠燈的完整一次的循環(共25個週期)。以下為截圖示範...
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_230990ce363dbbcfec2967cb63fab20e.png" /></li>
+<li>第二段：在<code>P_button</code>的影響下，一樣截圖紅綠燈運行的完整週期(會較長...)，仔細看<code>P_button</code>不同的時間點的觸發對電路的影響。
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_87f7380020f1f740ff8ecaaa2ce1b332.png" /></li>
+<li><strong>設計方式可以和助教不相同</strong>，但請在文件上說明詳細，圖上的訊號資訊。</li>
+<li>比如說關於state的輸出信號分別對應了哪個state，以上圖為例，在說明文件上我就會附上以下說明：
+  | state | map |
+  | ----- | --- |
+  | sIdle | 0   |
+  | sHGVR | 1   |
+  | sHYVR | 2   |
+  | sHRVG | 3   |
+  | sHRVY | 4   |
+  | sPG   | 5   |</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>port declaration (可以以Lab6-1去做更動實現)
+    <code>scala=
+    class TrafficLight_p(Ytime:Int, Gtime:Int, Ptime:Int) extends Module{
+        val io = IO(new Bundle{
+            val P_button = Input(Bool())
+            val H_traffic = Output(UInt(2.W))
+            val V_traffic = Output(UInt(2.W))
+            val P_traffic = Output(UInt(2.W))
+            val timer     = Output(UInt(5.W)) 
+        })
+    }</code></p>
+</li>
+</ul>
+<h2 id="hw6-2-calculator">Hw6-2 Calculator</h2>
+<h3 id="preface">preface</h3>
+<ul>
+<li>6-1-(1~3)：沿用Lab6-2在不同狀況下的思維與設計，使計算機的功能更加完善。
+:::danger</li>
+<li>注意：為因應多條測資的可能性，同學在設計FSM的時候，輸出答案的下一個狀態應回復至準備接收下一筆測資的狀態，具體請見Lab6-2 module 以及 tester。
+:::</li>
+</ul>
+<h3 id="hw6-2-1-negative-integer-generator">Hw6-2-1 Negative Integer Generator</h3>
+<h4 id="introduction_7">Introduction</h4>
+<ul>
+<li>Lab6-2-1讓同學實作出Number Generator，而此項作業則要求同學能夠加以沿用，讓負數也一樣能夠被組合出來，同時也能向下兼容Lab6-2-1的功能。</li>
+<li>tester input
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>//Situation 1
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Input：( - 1 2 3 4 ) =
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Output：-1234
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>//Situation 2
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>Input：1 2 3 4 =
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>Output：1234
+</code></pre></div>
+:::warning</li>
+<li>
+<p>要求：Hw6-1的實作中，對於負數的格式要求，必須<font color=#f00><strong>以括號包起來</strong></font>，難度會降低許多。</p>
+<ul>
+<li>Hint：<font color=#f00>( -</font> 1 2 3 4 ) =</li>
+<li>有些部分勢必得記下來，才可以影響如何存值。
+:::</li>
+</ul>
+</li>
+<li>
+<p>Hardware Circuit Overview
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_33e0d48c6f5fda3a53cf4c0f6db71bc8.png =80%x" /></p>
+</li>
+<li>
+<p>Port declaration
+    <code>scala=
+    class NegIntGen extends Module{
+        val io = IO(new Bundle{
+            val key_in = Input(UInt(4.W))
+            val value = Output(Valid(UInt(32.W)))
+        })
+    }</code></p>
+</li>
+</ul>
+<h3 id="hw6-2-2-n-operands-n-1-operators-">Hw6-2-2 N operands N-1 operators(+、-)</h3>
+<h4 id="introduction_8">Introduction</h4>
+<ul>
+<li>在Lab6-2-2我們考慮了兩個運算元和一個運算子的狀況，本次作業希望以Lab為基底，將功能延伸至N個運算元{N:N&gt;0}和N-1個運算子的計算。並能向下兼容Lab6-2以及Hw6-1-1的功能。</li>
+<li><strong>四則運算</strong>最基本的三個原則：<ol>
+<li>先乘除後加減 -&gt; 考慮到operator priority</li>
+<li>括號內先算</li>
+<li>由左算至右</li>
+</ol>
+</li>
+<li>
+<p>此項作業僅考慮第三個條件做處理，處理長算式中一系列的<strong>加減運算</strong>。</p>
+</li>
+<li>
+<p>tester input
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>//Situation 1
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Input：11 + 12 + 3 + 14 + 15 + 16 =
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Output：71
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>//more difficult
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>Input：1 - ( - 12 ) + 3 + 4 + 5 - ( - 6 ) =
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>Output：31
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>//downward compatibility
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>Input：( - 12 ) =
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>Output：-12
+</code></pre></div></p>
+</li>
+<li>Port declaration
+    <code>scala=
+    class LongCal extends Module{
+        val io = IO(new Bundle{
+            val key_in = Input(UInt(4.W))
+            val value = Output(Valid(UInt(32.W)))
+        })
+    }</code></li>
+<li>State Overview
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_6118e42fdc2a9672d5ed3bf34a250459.png =25%x" /></li>
+</ul>
+<h3 id="hw6-2-3-order-of-operation-">Hw6-2-3 Order of Operation (+、-、*、(、))</h3>
+<h4 id="introduction_9">Introduction</h4>
+<ul>
+<li>不同於前面的Lab，在<strong>運算子、運算元的數量</strong>和<strong>運算順序 由左至右</strong>都是已知、確定的情況下，自然可以簡單地用state diagram來做出輸入值該存至哪個暫存器的區分(sSrc1、sOp、sSrc2)</li>
+<li>此項作業希望同學將四則運算的三項原則都考慮進來，分析在一條算式中運算的執行順序，並制定對應的FSM。</li>
+<li>Order of Operation：<ol>
+<li>Parentheses</li>
+<li><font color=#aaa> Exponents (right to left) 此項作業不考慮，列出僅供參考。</font><ul>
+<li>right to left的意思是右邊的優先權會高於左邊的</li>
+<li>Ex: 2 ^ 3 ^ 2=2^9=512</li>
+</ul>
+</li>
+<li>Mutiplication (left to right)</li>
+<li>Addition and Subtraction (left to right)</li>
+</ol>
+</li>
+<li>人類在解算式，習慣以<strong>中序infix</strong>方式來解讀並計算，但對於電腦來說，受限於演算法無法綜觀並處理整條算式的緣故，習慣將表示方式轉成<strong>後序postfix</strong>後再作運算。<a href="https://www.javatpoint.com/convert-infix-to-postfix-notation">reference</a>。
+  :::info
+  Example：</li>
+<li>infix: 4+3+(-1)-6</li>
+<li>postfix: 43+(-1)+6-</li>
+<li>表示方式的小小提醒：(-1)是視為一個運算元喔!也可以寫作0xffffffff，但因為太醜了，所以這邊提醒一下，括號只是讓同學好區分負數正數，不論是infix還是postfix都僅記下了4個運算元和3個運算子。
+  :::</li>
+<li>
+<p>需要重新考慮的有：</p>
+<ol>
+<li>state的設計劃分</li>
+<li>
+<p>在infix2postfix之中，stack的運用</p>
+<ul>
+<li>參考資源：chisel-tutorial/src/main/scala/examples/Stack.scala</li>
+<li><strong>可以自行多加</strong>檔案 stack.scala並依自己設計做更動，繳回作業時一併上傳至gitlab即可。
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_9b3b332da4c42dcae4573b9d554c1110.png =20%x" /></li>
+</ul>
+</li>
+<li>
+<p>若是採用先存值再處理的方式。編碼衝突該如何處理? 運算元10~15都會遇到和符號編碼相衝突，該如何解決呢？</p>
+</li>
+</ol>
+</li>
+<li>
+<p>設計參考：</p>
+<ul>
+<li>state劃分：
+<img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_77862fbdff941828c8898b3d64d36e83.png" /></li>
+</ul>
+</li>
+<li>
+<p>tester input
+    <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>//Situation
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Input：1 1 * ( 1 2 - 3 ) * 1 4 + ( 1 5 - ( - 1 6 ) )=
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>postfix:??
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Output:1417
+</code></pre></div></p>
+</li>
+<li>Port declaration
+    <code>scala=
+    class CpxCal extends Module{
+        val io = IO(new Bundle{
+            val key_in = Input(UInt(4.W))
+            val value = Output(Valid(UInt(32.W)))
+        })
+    }</code>
+:::info</li>
+<li>General Calculator<ul>
+<li>最後做出來的計算機應能夠兼容前面所有Lab、Hw它們tester裡面的算式。
+:::</li>
+</ul>
+</li>
+</ul>
+<h4 id="bonus"><strong>Bonus</strong></h4>
+<ul>
+<li>在不<strong>影響作業要求</strong>以及<strong>更動原本編碼</strong>的情況下，同學可以選擇...</li>
+<li>
+<p>將“＾”功能實現(Order of Operation 2.)</p>
+<ul>
+<li>
+<p>記得要擴充key_in的bit數，和tester裡面的dict
+  <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_d3266b6b6c1b92fdcd01377bb3b8c01d.png =15%x" /></p>
+</li>
+<li>
+<p>自行加入算式作為測值，並在繳交文件中註明你有做到的額外功能。</p>
+</li>
+<li>算式格式：<ul>
+<li>字串，中間必須無空格</li>
+<li>以等號做結尾，ex: <font color=#075>"(-15)-15-(-15)+(-15)="</font></li>
+<li>算式要合理，括號數量要對！</li>
+</ul>
+</li>
+<li>使功能更便利...</li>
+<li>比如說，負數可以不需要括號就能夠實現，當然有括號的還是得能夠正確<ul>
+<li>一樣將“額外功能”在說明文件上註明，並加上算式在tester中。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="hw6-3-lfsr-base-1a2b-number-guess-game">Hw6-3 LFSR-base 1A2B Number Guess Game</h2>
+<h3 id="preface_1">preface</h3>
+<ul>
+<li>
+<p>利用Lab2的LFSR(Linear feedback shift register)，作為隨機數字產生器，並將其應用至經典1A2B(Bulls and Cows)。
+    <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_3103d02b76c97627f22732a5dcad879f.png =80%x" /></p>
+</li>
+<li>
+<p>電路行為描述：</p>
+<ul>
+<li>Reset後，LFSR根據seed做為初始值，每一次clock做一次shift。</li>
+<li>Gen為採樣訊號，拉至High時，會採樣LFSR當下<strong>處理好</strong>的值(ex:1834)。 &lt;- Hw6-3-1</li>
+<li>當數列產生無誤後，<code>ready</code>訊號會拉至High讓使用者知道可以開始猜。</li>
+<li><code>Guess[15:0]</code>為玩家的輸入，和題目一樣每4個bits代表一隨機數。</li>
+<li>輸入<code>Guess</code>後，電路開始比較<strong>題目</strong>以及<strong>猜測</strong>，<code>ready</code>訊號會拉至Low。，除此之外，<code>ready</code>訊號也會在最終結果(幾A幾B)和<code>valid</code>輸出後的下一刻，再次拉高至High等待下一筆猜測。</li>
+<li>計算完成後，電路會將<code>valid</code>訊號拉至High，並同時將幾A幾B結果輸出。</li>
+<li>當計算結束後，除非A=4，否則電路又會將<code>ready訊號</code>拉至High，等待下一次的猜測。</li>
+</ul>
+</li>
+</ul>
+<h3 id="hw6-3-1-pseudo-random-number-generator">Hw6-3-1 Pseudo Random Number Generator</h3>
+<p>:::warning</p>
+<blockquote>
+<p>[name=張峻豪]
+在作業原始碼中，有關於 io.puzzle 信號的初始化
+原本的程式碼是</p>
+<p>```scala=
+io.puzzle := Vec(4, 0.U)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>但這樣的寫法在編譯的時後會報錯，提示 &quot;chisel3.package$ExpectedChiselTypeException: vec type &#39;UInt&lt;1&gt;(0)&#39; must be a Chisel type, not hardware&quot;
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>正確的寫法應改成如下
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>```scala=
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>io.puzzle := VecInit(Seq.fill(4)(0.U(4.W)))
+</code></pre></div></p>
+<p>應該利用 <code>VecInit</code> 來初始化，而非直接用 <code>Vec</code>
+<code>Vec</code> 應作為宣告訊號線時 (without initialization) 的用法，如果要賦值則該採用 <code>VecInit</code>
+:::</p>
+</blockquote>
+<h4 id="introduction_10">Introduction</h4>
+<ul>
+<li>
+<p>作業要求：</p>
+<ol>
+<li>請同學實作出一16 bits的LFSR，tap的數量以及擺放位置如下圖所示。
+  <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_a0795c7662f41a9ed877d599d81bbde1.png" /></li>
+<li>作為1A2B的隨機數字產生器，以4 bits為一個隨機的數字(共4個)。需額外考慮...<ol>
+<li>隨機數字範圍為10~15時該如何處理?<ul>
+<li>將此範圍的數字依順序mapping至0~5<ul>
+<li>以上圖為例：A C E 1 -&gt; 0 2 4 1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>數字重複時該如何處理？<ul>
+<li>請同學自行處理，並在說明文件中詳細闡述你所使用的方式。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>port declaration
+    <code>scala=
+    class PRNG(seed:Int) extends Module{
+        val io = IO(new Bundle{
+            val gen = Input(Bool())
+            val puzzle = Output(Vec(4,UInt(4.W)))
+            val ready = Output(Bool())
+        })
+    }</code></p>
+<ul>
+<li><code>gen</code> : 觸發信號，當訊號為High時(時長為 1 clk)，module必須取樣LFSR的值，並處理成合理的<strong>題目</strong>
+    :::danger 
+    同學必須解決<strong>超過範圍</strong>、<strong>重複值</strong>這些問題
+    :::</li>
+<li><code>puzzle</code>: 出題題目，為4*4bits格式，代表每個隨機數，index由左至右依序為3 2 1 0。</li>
+<li><code>ready</code> : 當題目處理好時，拉高至High，讓<strong>外部</strong>使用者知道題目已經準備好了。</li>
+</ul>
+</li>
+<li>tester驗證方式<ul>
+<li>seed預設為1，同學可不必在意。</li>
+<li>tester會在<strong>隨機時刻</strong>拉起gen訊號10次。<ul>
+<li>每一次都會等到題目產生(ready至High時)才會發出下一次的gen訊號。</li>
+</ul>
+</li>
+<li>檢測內容：<ol>
+<li>數字不超過範圍(0~9)</li>
+<li>數字不重複</li>
+<li>每次題目不重複。</li>
+</ol>
+</li>
+<li>實際檢測結果：
+    <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_16436de15767f83ef2fd13f612496d2c.png =40%x" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="hw6-3-2-1a2b-game-quiz">Hw6-3-2 1A2B game quiz</h3>
+<h4 id="introduction_11">Introduction</h4>
+<ul>
+<li>接續6-2-1的題目產生器，6-2-2需要同學能透過題目(puzzle)和猜測(guess)兩個訊號源實現一比較電路，並輸出比較結果(幾A幾B)。</li>
+<li>電路行為如下說明：<ul>
+<li>tester會做的事：<ul>
+<li>tester會在隨機時刻拉高<code>gen</code>，prng會sample並處理好題目。</li>
+<li>prng產生好題目時，ready訊號會被拉高。此時tester會要求同學由左至右輸入猜測內容。</li>
+</ul>
+</li>
+<li>同學需完成的事：<ul>
+<li>比較兩者內容，輸出比較結果:幾A幾B</li>
+<li>持續輸入猜測內容直至得到4A (放心一開始會印出題目...)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>驗證流程演示：</p>
+<ul>
+<li>from teminal
+  <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_4f376c9b872c14dcd3600a06823673eb.png =40%x" /></li>
+<li>from vcd
+  <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_f3cedc4cb2b70d4091b9ccd2998c7a77.png" /></li>
+</ul>
+</li>
+<li>
+<p>port declaration
+```scala=
+class NumGuess(seed:Int = 1) extends Module{
+    require (seed &gt; 0 , "Seed cannot be 0")</p>
+<p>val io  = IO(new Bundle{
+    val gen = Input(Bool())
+    val guess = Input(UInt(16.W))
+    val puzzle = Output(Vec(4,UInt(4.W))) //for tester to print value...
+    val ready  = Output(Bool())
+    val valid  = Output(Bool())
+    val A      = Output(UInt(3.W))
+    val B      = Output(UInt(3.W))
+})
+}
+```</p>
+</li>
+</ul>
+<h3 id="bonus-1a2b-hardware-solver">Bonus : 1A2B hardware solver</h3>
+<h4 id="introduction_12">Introduction</h4>
+<p><img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_103ede97bbabd89da18651f8dd2d89c3.png =90%x" />
+1. 將自已的解題技巧implement至硬體上，完成solver.scala。
+    - 猜測數字可以重複，ex:1 1 1 1 
+    - 在文件中描述自己的<strong>解題策略</strong>
+- port declaration
+    <code>scala=
+    class Solver extends Module{
+        val io = IO(new Bundle{
+            val A = Input(UInt(3.W))
+            val B = Input(UInt(3.W))
+            val ready = Input(Bool())
+            val guess = Output(Vec(4,UInt(4.W)))
+            val g_valid = Input(Bool())
+            val s_valid = Output(Bool())
+            val finish = Output(Bool()) //end signal
+        })
+    }</code>
+2. 利用top.scala將兩個Module(NumGuess.scala和Solver.scala)包起來，提供兩個模塊的互動環境。
+    - 兩個module需互動直至A=4，<code>finish</code>=High
+    - waveview for reference
+    <img alt="" src="https://playlab.computing.ncku.edu.tw:3001/uploads/upload_ffa0c3ec92420a1c4b0117abb1454d11.png" />
+- port declaration and wiring
+    ```scala=
+    class top extends Module{
+        val io  = IO(new Bundle{
+            val gen = Input(Bool())
+            val finish = Output(Bool())
+        })</p>
+<div class="highlight"><pre><span></span><code>    val ng = Module(new NumGuess(1))
+    val ns = Module(new Solver())
+
+    ng.io.gen := io.gen
+    ng.io.guess := ns.io.guess.asUInt
+    ng.io.s_valid := ns.io.s_valid
+
+    ns.io.A := ng.io.A
+    ns.io.B := ng.io.B
+    ns.io.ready := ng.io.ready
+    ns.io.g_valid := ng.io.g_valid
+
+    io.finish := ns.io.finish
+}
+```
+</code></pre></div>
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+          <a href="#" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </a>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.top", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.b97dbffb.min.js", "translations": {"clipboard.copied": "\u5df2\u8907\u88fd", "clipboard.copy": "\u8907\u88fd", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\s\\-\u3000\u3001\u3002\uff0c\uff0e\uff1f\uff1b]+", "search.placeholder": "\u641c\u5c0b", "search.result.more.one": "\u6b64\u9801\u5c1a\u6709 1 \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.more.other": "\u6b64\u9801\u5c1a\u6709 # \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.none": "\u6c92\u6709\u7b26\u5408\u7684\u9805\u76ee", "search.result.one": "\u627e\u5230 1 \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.other": "\u627e\u5230 # \u500b\u7b26\u5408\u7684\u9805\u76ee", "search.result.placeholder": "\u6253\u5b57\u9032\u884c\u641c\u5c0b", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.6c7ad80a.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
